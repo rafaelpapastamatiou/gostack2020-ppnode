@@ -6,13 +6,15 @@ import express, { Request, Response, NextFunction } from 'express';
 
 import 'express-async-errors';
 
-import routes from './routes';
+import routes from '@shared/infra/http/routes';
 
-import uploadConfig from './config/upload';
+import uploadConfig from '@config/upload';
 
-import AppError from './errors/AppError';
+import AppError from '@shared/errors/AppError';
 
-import './database';
+import '@shared/infra/typeorm';
+
+import '@shared/container';
 
 const app = express();
 
@@ -27,6 +29,8 @@ app.use((err: Error, req: Request, res: Response, _: NextFunction) => {
       .status(err.statusCode)
       .json({ status: 'error', message: err.message });
   }
+
+  console.log(err);
 
   return res
     .status(500)
