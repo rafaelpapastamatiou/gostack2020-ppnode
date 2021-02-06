@@ -8,4 +8,4 @@ const providers = {
   ethereal: EtherealMailProvider,
 };
 
-container.registerSingleton<IMailProvider>('CacheProvider', providers.ethereal);
+container.registerSingleton<IMailProvider>('MailProvider', providers.ethereal);
