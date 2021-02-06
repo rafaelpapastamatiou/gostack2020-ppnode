@@ -14,8 +14,10 @@ export default class EtherealMailProvider implements IMailProvider {
   constructor(
     @inject('MailTemplateProvider')
     private mailTemplateProvider: IMailTemplateProvider,
-  ) {
-    nodemailer.createTestAccount().then(account => {
+  ) {}
+
+  private createClient = async (): Promise<void> => {
+    await nodemailer.createTestAccount().then(account => {
       const transporter = nodemailer.createTransport({
         host: account.smtp.host,
         port: account.smtp.port,
@@ -28,7 +30,7 @@ export default class EtherealMailProvider implements IMailProvider {
 
       this.client = transporter;
     });
-  }
+  };
 
   public async sendMail({
     to,
@@ -36,6 +38,8 @@ export default class EtherealMailProvider implements IMailProvider {
     from,
     templateData,
   }: ISendMailDTO): Promise<void> {
+    await this.createClient();
+
     const message = await this.client.sendMail({
       from: {
         name: from?.name || 'Equipe GoBarber',
